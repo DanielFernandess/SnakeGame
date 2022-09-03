@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jogo Da Cobrinha</title>
+    </head>
+    <body><!--Tamanho da tabuleiro - quadrado -->
+        <canvas id="stage" width="600" height="600"></canvas>
+        <script type="text/javascript"> 
+            //tela
+            window.onload = function(){
+                //pegando elemento do html e passa o id do stage
+                var stage = document.getElementById('stage');
+                //Parte de desenhos - parte grafica, visual
+                var ctx = stage.getContext("2d");
+                //fica esperando por um evento, e despara a funcao key push
+                document.addEventListener("keydown", keyPush);
+
+                //intervalo pra uma funcao ser chamada vrz vzs com o mesmo intervalo
+                setInterval(game, 100); //velocidade da cobra
+
+                //velocidade da cobra = quabras casas anda a cada atualização
+                const vel = 1; //anda 1 casa
+
+                //velocidade inicia em 0
+                var vx = vy = 0
+                //inicia do jogo
+                var px = 10;
+                var py = 15;
+                //tamanho da peça
+                var tp = 30;
+                //quantidade de peças
+                var qp = 20;
+                //posição inciial da comida
+                var ax = ay = 15;
+
+                //tamanho do rastro da cobra
+                var trail = [];
+                tail = 5;
+
+                function game(){
+
+                    px += vx;
+                    py += vy;
+                    //para utrapassar as bordas
+                    if (px < 0){
+                        px = qp - 1;
+                    }
+                    if (px > qp - 1){
+                        px = 0;
+                    }
+                    if (py < 0){
+                        py = qp - 1;
+                    }
+                    if (py > qp - 1){
+                        py = 0;
+                    }
+
+                    ctx.fillStyle = "black";
+				    ctx.fillRect(0,0, stage.width, stage.height);
+
+                    //cor da comida
+                    ctx.fillStyle = "red";
+				    ctx.fillRect(ax * tp, ay * tp, tp, tp);
+
+                    //pintar cobra e rastro
+                    ctx.fillStyle = "gray";
+                    for (var i = 0; i < trail.length; i++) {
+                        ctx.fillRect(trail[i].x*tp, trail[i].y*tp, tp-1,tp-1);
+                        //se cabeça bater no rastro 
+                        if (trail[i].x == px && trail[i].y == py){
+                            vx = vy = 0;
+                            //volta ao vlr normal
+                            tail = 5;
+                        }
+                    }
+
+                    //movimento da cobra
+                    //criando objeto 
+                    trail.push({x:px,y:py })
+                    //se rastro + calda, tira primeiro elemento
+                    while (trail.length > tail) {
+                        trail.shift();
+                    }
+                    //almentar a cobra
+                    if (ax==px && ay==py){
+                        tail++;
+                        //reposicionando comida
+                        ax = Math.floor(Math.random()*qp);
+					    ay = Math.floor(Math.random()*qp);
+                    }
+                }
+
+                //controlando a cobra
+                function keyPush(event){
+                    //verifica o codigo da chave/evento
+                    switch (event.keyCode) {
+                        case 37: //tecla da esquerda/left
+                            vx = -vel;
+                            vy = 0;
+                            break;
+                        case 38: //tecla de cima/up
+                            vx = 0;
+                            vy = -vel;
+                            break;
+                        case 39: //tecla da direita/right
+                            vx = vel;
+                            vy = 0;
+                            break;
+                        case 40: //tecla de baixo/down
+                            vx = 0;
+                            vy = vel;
+                            break;
+                    }
+
+                }
+
+            }
+        </script>
+    </body>
+</html>
