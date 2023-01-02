@@ -8,6 +8,8 @@ Jogo simplicado do "Jogo Da Cobrinha".
 
 Estudo de principais funções do JavaScript e HTML!
 
+Basta clicar no link acima.
+
 # Tecnologias utilizadas
 ## Back end & Front end
 - HTML
